@@ -11,15 +11,15 @@ import kotlinx.android.synthetic.main.fragment_main.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
-class MainFragment:TianaFragment() {
+class MainFragment : TianaFragment() {
     private lateinit var binding: FragmentMainBinding
-    val viewModel:MainViewModel by viewModel()
+    val viewModel: MainViewModel by viewModel()
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        this.binding= FragmentMainBinding.inflate(layoutInflater, container, false)
+        this.binding = FragmentMainBinding.inflate(layoutInflater, container, false)
         return binding.root
     }
 
@@ -27,18 +27,24 @@ class MainFragment:TianaFragment() {
         super.onViewCreated(view, savedInstanceState)
 
 
-        viewModel.progressLiveData.observe(viewLifecycleOwner){
-            setProgressIndicator(it)
+        viewModel.progressLiveData.observe(viewLifecycleOwner) {
+            if (it)
+                this.binding.loadingView.visibility = View.VISIBLE
+            else
+                this.binding.loadingView.visibility = View.GONE
         }
 
-        viewModel.bannerLiveData.observe(viewLifecycleOwner){
-            val bannerSliderAdapter = BannerSliderAdapter(this,it)
-            this.binding.activityMainBannerSliderVp.adapter=bannerSliderAdapter
-            this.binding.activityMainBannerSliderVp.post{
-                val height=(((this.binding.activityMainBannerSliderVp.width- convertDpToPixel(32f,requireContext()))*173)/328).toInt()
-                val layoutParams=this.binding.activityMainBannerSliderVp.layoutParams
-                layoutParams.height=height
-                this.binding.activityMainBannerSliderVp.layoutParams=layoutParams
+        viewModel.bannerLiveData.observe(viewLifecycleOwner) {
+            val bannerSliderAdapter = BannerSliderAdapter(this, it)
+            this.binding.activityMainBannerSliderVp.adapter = bannerSliderAdapter
+            this.binding.activityMainBannerSliderVp.post {
+                val height = (((this.binding.activityMainBannerSliderVp.width - convertDpToPixel(
+                    32f,
+                    requireContext()
+                )) * 173) / 328).toInt()
+                val layoutParams = this.binding.activityMainBannerSliderVp.layoutParams
+                layoutParams.height = height
+                this.binding.activityMainBannerSliderVp.layoutParams = layoutParams
                 this.binding.activityMainBannerSliderDi.setViewPager2(this.binding.activityMainBannerSliderVp)
             }
         }

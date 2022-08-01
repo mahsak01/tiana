@@ -17,6 +17,12 @@
             android:layout_height="wrap_content"
             tools:ignore="MissingConstraints">
 
+            <ProgressBar
+                android:id="@+id/loadingView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"/>
+
             <androidx.viewpager2.widget.ViewPager2
                 android:id="@+id/activityMain_bannerSliderVp"
                 android:layout_width="match_parent"

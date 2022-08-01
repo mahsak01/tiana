@@ -38,22 +38,6 @@ abstract class TianaActivity: AppCompatActivity(), TianaView{
 interface TianaView{
     val rootView: CoordinatorLayout?
     val viewContext: Context?
-    fun setProgressIndicator(mustShow: Boolean) {
-        rootView?.let {
-            viewContext?.let { context ->
-                var loadingView = it.findViewById<View>(R.id.loadingView)
-                if (loadingView == null && mustShow) {
-                    loadingView =
-                        LayoutInflater.from(context).inflate(R.layout.view_loading, it, false)
-                    it.addView(loadingView)
-                }
-
-                loadingView?.visibility = if (mustShow) View.VISIBLE else View.GONE
-
-            }
-
-        }
-    }
 }
 
 const val EXTRA_KEY_DATA="data"
