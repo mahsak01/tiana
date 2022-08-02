@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">tianaServer</string>
+    <string name="addServer">افزودن سرور</string>
+    <string name="serverName">نام سرور</string>
+</resources>
