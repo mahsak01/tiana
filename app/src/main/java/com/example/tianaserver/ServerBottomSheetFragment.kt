@@ -15,9 +15,10 @@ import org.greenrobot.eventbus.util.ErrorDialogManager
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class ServerBottomSheetDialogFragment : BottomSheetDialogFragment(),ServerAdapter.ServerEventListener {
+class ServerBottomSheetFragment : BottomSheetDialogFragment(), ServerAdapter.ServerEventListener,
+    ServerDialogFragment.DeleteEventListener, AddServerDialogFragment.AddServerDialogEventListener {
 
-    val viewModel: ServerViewModel by inject()
+    val viewModel: ServerViewModel by viewModel()
     lateinit var binding: FragmentServerBottomSheetBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -29,22 +30,17 @@ class ServerBottomSheetDialogFragment : BottomSheetDialogFragment(),ServerAdapte
         super.onViewCreated(view, savedInstanceState)
 
         viewModel.serversLiveData.observe(viewLifecycleOwner) {
-            if (it.isNotEmpty()) {
-                binding.activityMainServersBottomSheetRv.layoutManager =
-                    LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false)
-                binding.activityMainServersBottomSheetRv.adapter =
-                    ServerAdapter(it  as MutableList<Server> ,this)
-            }
+            binding.activityMainServersBottomSheetRv.layoutManager =
+                LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false)
+            binding.activityMainServersBottomSheetRv.adapter =
+                ServerAdapter(it as MutableList<Server>, this)
         }
 
         binding.activityMainAddServerBtn.setOnClickListener {
-            var addServerDialog = AddServerDialogFragment()
+            var addServerDialog = AddServerDialogFragment(this)
             addServerDialog.show(requireActivity().supportFragmentManager, null)
-            dismiss()
-
         }
     }
-
 
 
     override fun onCreateView(
@@ -62,7 +58,8 @@ class ServerBottomSheetDialogFragment : BottomSheetDialogFragment(),ServerAdapte
     }
 
     override fun deleteServer(server: Server) {
-        viewModel.deleteServer(server)
+        var addServerDialog = ServerDialogFragment(this, server)
+        addServerDialog.show(requireActivity().supportFragmentManager, null)
     }
 
     override fun addServer(server: Server) {
@@ -73,4 +70,14 @@ class ServerBottomSheetDialogFragment : BottomSheetDialogFragment(),ServerAdapte
         viewModel.updateServer(server)
 
     }
+
+    override fun delete(server: Server) {
+        viewModel.deleteServer(server)
+    }
+
+    override fun add(server: Server) {
+        addServer(server)
+    }
+
+
 }

@@ -16,22 +16,16 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-<!--            <RadioGroup-->
-<!--                android:id="@+id/radioGroup"-->
-<!--                android:layout_width="wrap_content"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                app:layout_constraintBottom_toBottomOf="parent"-->
-<!--                app:layout_constraintStart_toStartOf="parent"-->
-<!--                app:layout_constraintTop_toTopOf="parent">-->
-
-            <!--            </RadioGroup>-->
-
             <RadioButton
                 android:id="@+id/layoutServer_defaultServerRb"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:buttonTint="@color/green"
-                android:text="یاورزاده"
+                tools:text="یاورزاده"
+                android:marqueeRepeatLimit="marquee_forever"
+                android:focusable="true"
+                android:singleLine="true"
+                android:paddingHorizontal="10dp"
                 android:textDirection="rtl"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/layoutServer_deleteServerBtn"

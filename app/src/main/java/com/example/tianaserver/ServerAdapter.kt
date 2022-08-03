@@ -17,14 +17,13 @@ class ServerAdapter(val serversList: MutableList<Server>,val serverEventListener
             if (server.isDefault)
                 binding.layoutServerDefaultServerRb.isChecked=true
 
+            binding.layoutServerDefaultServerRb.isSelected=true
+
             binding.layoutServerDeleteServerBtn.setOnClickListener {
-                serversList.remove(server)
-                notifyItemRemoved(adapterPosition)
                 serverEventListener.deleteServer(server)
             }
             binding.layoutServerDefaultServerRb.setOnClickListener {
                 serverEventListener.updateServer(server)
-                notifyDataSetChanged()
             }
 
         }

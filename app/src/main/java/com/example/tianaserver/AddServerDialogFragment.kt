@@ -26,14 +26,13 @@ import java.io.File
 import java.util.ArrayList
 
 
-class AddServerDialogFragment : DialogFragment(), PickiTCallbacks {
-    lateinit var binding: LayoutServerAddServerDialogBinding
-    var pickiT: PickiT? = null
-    var serverAddress: String? = null
-    var reportingServer: String? = null
-    var serverName:String?=null
+class AddServerDialogFragment(val addServerDialogEventListener: AddServerDialogEventListener) : DialogFragment(), PickiTCallbacks {
+    private lateinit var binding: LayoutServerAddServerDialogBinding
+    private var pickiT: PickiT? = null
+    private var serverAddress: String? = null
+    private var reportingServer: String? = null
+    private var serverName: String? = null
 
-    val viewModel: ServerViewModel by inject()
 
 
     private val filePickerLauncher =
@@ -43,8 +42,7 @@ class AddServerDialogFragment : DialogFragment(), PickiTCallbacks {
             if (result.resultCode == Activity.RESULT_OK) {
                 result.data?.let {
                     it.data?.let { it1 ->
-                        var uri = pickiT?.getPath(it1, Build.VERSION.SDK_INT)
-
+                        pickiT?.getPath(it1, Build.VERSION.SDK_INT)
                     }
                 }
             }
@@ -59,6 +57,7 @@ class AddServerDialogFragment : DialogFragment(), PickiTCallbacks {
 
     override fun onResume() {
         super.onResume()
+        this@AddServerDialogFragment.binding.layoutServerFileUriTv.isSelected=true
         this.setListeners()
     }
 
@@ -76,7 +75,6 @@ class AddServerDialogFragment : DialogFragment(), PickiTCallbacks {
 
     private fun setListeners() {
         this.binding.layoutServerChooseFileBtn.setOnClickListener {
-
             filePickerLauncher.launch(Intent(Intent.ACTION_OPEN_DOCUMENT).also {
                 it.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
                 it.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION)
@@ -86,25 +84,24 @@ class AddServerDialogFragment : DialogFragment(), PickiTCallbacks {
             })
         }
         this.binding.layoutServerAddServerBtn.setOnClickListener {
-            serverName=this.binding.layoutServerServerNameTI.editText?.text.toString()
-            if (serverName!=null){
-                if (serverAddress!=null&&reportingServer!=null){
-                    var server= Server(0, serverName!!, serverAddress!!, reportingServer!!,false)
-                    viewModel.addServer(server)
+            serverName = this.binding.layoutServerServerNameTI.editText?.text.toString()
+            if (serverName!=null && serverName!="") {
+                if (serverAddress != null && reportingServer != null) {
+                    val server = Server(0, serverName!!, serverAddress!!, reportingServer!!, false)
+                    addServerDialogEventListener.add(server)
                     showToast("سرور اضافه شد")
                     dismiss()
-
-                }else
+                } else
                     showToast("فایل خود را به درستی انتخاب کنید")
-
-            }else
+            } else
                 showToast("نام سرور را وارد کنید")
         }
     }
+
     fun showToast(message: String) {
         Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
-
     }
+
     override fun PickiTonUriReturned() {
     }
 
@@ -130,7 +127,7 @@ class AddServerDialogFragment : DialogFragment(), PickiTCallbacks {
                             val bufferedReader = file.bufferedReader()
                             serverAddress = bufferedReader.readLine()
                             reportingServer = bufferedReader.readLine()
-
+                            this@AddServerDialogFragment.binding.layoutServerFileUriTv.text=path
                         } catch (e: Exception) {
                             Timber.e(e.message)
                         }
@@ -149,5 +146,9 @@ class AddServerDialogFragment : DialogFragment(), PickiTCallbacks {
         wasSuccessful: Boolean,
         Reason: String?
     ) {
+    }
+
+    interface AddServerDialogEventListener{
+        fun add(server: Server)
     }
 }

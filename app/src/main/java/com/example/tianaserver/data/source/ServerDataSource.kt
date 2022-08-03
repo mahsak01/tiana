@@ -6,7 +6,7 @@ import io.reactivex.Single
 
 interface ServerDataSource {
 
-    fun getDefaultServer(): Single<Server>
+
 
     fun getServers():Single<List<Server>>
 

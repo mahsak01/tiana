@@ -17,28 +17,20 @@
             android:hint="@string/serverName"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
-        </com.google.android.material.textfield.TextInputLayout>
+            app:layout_constraintTop_toTopOf="parent"/>
 
 
         <TextView
-            android:id="@+id/layoutServer_fileUriTv"
-            android:ellipsize="marquee"
-            android:marqueeRepeatLimit="marquee_forever"
-            android:focusable="true"
-            android:singleLine="true"
+            android:id="@+id/textview"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingTop="10dp"
             android:paddingBottom="10dp"
+            android:gravity="center"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/layoutServer_serverNameTI"
-            tools:text="salam" />
+            android:text="آیا از حذف این سرور مطمئن هستید؟" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -48,24 +40,24 @@
             android:orientation="horizontal"
             android:paddingTop="8dp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/layoutServer_fileUriTv">
+            app:layout_constraintTop_toBottomOf="@+id/textview">
+
             <com.google.android.material.button.MaterialButton
-                android:id="@+id/layoutServer_addServerBtn"
+                android:id="@+id/layoutServer_deleteServerYesBtn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="8dp"
-                android:text="افزودن"
-                app:backgroundTint="@color/green"
-                app:layout_constraintVertical_bias="1.0" />
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/layoutServer_chooseFileBtn"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="انتخاب فایل"
-                android:layout_marginStart="8dp"
+                android:text="بله"
                 app:backgroundTint="@color/green" />
 
-
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/layoutServer_deleteServerNoBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:text="خیر"
+                app:backgroundTint="@color/green"
+                app:layout_constraintVertical_bias="1.0" />
         </LinearLayout>
 
 

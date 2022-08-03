@@ -12,7 +12,7 @@ import org.koin.core.context.startKoin
 import org.koin.dsl.module
 import timber.log.Timber
 
-class App:Application() {
+class App : Application() {
     override fun onCreate() {
         super.onCreate()
         Timber.plant(Timber.DebugTree())
@@ -20,11 +20,14 @@ class App:Application() {
         Fresco.initialize(this)
 
         val myModules = module {
-            single { Room.databaseBuilder(this@App, AppDatabase::class.java , "server_db_app").allowMainThreadQueries().fallbackToDestructiveMigration().build() }
+            single {
+                Room.databaseBuilder(this@App, AppDatabase::class.java, "server_db_app")
+                    .allowMainThreadQueries().fallbackToDestructiveMigration().build()
+            }
             factory<ServerRepository> {
                 ServerRepositoryImplement(get<AppDatabase>().serviceDao())
             }
-            single { ServerViewModel(get()) }
+            viewModel{ ServerViewModel(get()) }
         }
 
         startKoin {

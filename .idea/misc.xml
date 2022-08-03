@@ -7,9 +7,10 @@
         <entry key="..\:/Users/mah80/StudioProjects/tianaServer/app/src/main/res/drawable/ic_round_delete_outline_24.xml" value="0.1385" />
         <entry key="..\:/Users/mah80/StudioProjects/tianaServer/app/src/main/res/layout/activity_main.xml" value="0.18" />
         <entry key="..\:/Users/mah80/StudioProjects/tianaServer/app/src/main/res/layout/activity_main_bottom_sheet.xml" value="0.25" />
-        <entry key="..\:/Users/mah80/StudioProjects/tianaServer/app/src/main/res/layout/fragment_server_bottom_sheet.xml" value="0.1" />
-        <entry key="..\:/Users/mah80/StudioProjects/tianaServer/app/src/main/res/layout/layout_server_add_server_dialog.xml" value="0.1" />
-        <entry key="..\:/Users/mah80/StudioProjects/tianaServer/app/src/main/res/layout/layout_server_bottom_sheet_item.xml" value="0.1" />
+        <entry key="..\:/Users/mah80/StudioProjects/tianaServer/app/src/main/res/layout/fragment_server_bottom_sheet.xml" value="0.209375" />
+        <entry key="..\:/Users/mah80/StudioProjects/tianaServer/app/src/main/res/layout/layout_server_add_server_dialog.xml" value="0.33" />
+        <entry key="..\:/Users/mah80/StudioProjects/tianaServer/app/src/main/res/layout/layout_server_bottom_sheet_item.xml" value="0.29213483146067415" />
+        <entry key="..\:/Users/mah80/StudioProjects/tianaServer/app/src/main/res/layout/layout_server_dialog.xml" value="0.33" />
       </map>
     </option>
   </component>

@@ -9,7 +9,6 @@ import io.reactivex.Single
 class ServerRepositoryImplement(
     val serverLocalDataSource: ServerDataSource
 ) : ServerRepository {
-    override fun getDefaultServer(): Single<Server> =serverLocalDataSource.getDefaultServer()
 
     override fun getServers(): Single<List<Server>> =serverLocalDataSource.getServers()
 

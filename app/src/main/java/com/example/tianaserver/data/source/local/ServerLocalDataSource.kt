@@ -10,8 +10,6 @@ import io.reactivex.Single
 @Dao
 interface ServerLocalDataSource:ServerDataSource {
 
-    @Query("SELECT * from servers WHERE is_default = 1")
-    override fun getDefaultServer(): Single<Server>
 
     @Query("SELECT * from servers")
     override fun getServers(): Single<List<Server>>

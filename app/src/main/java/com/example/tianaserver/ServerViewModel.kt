@@ -17,37 +17,48 @@ class ServerViewModel(val serverRepository: ServerRepository) : ViewModel() {
 
     var serversLiveData = MutableLiveData<List<Server>>()
 
-    var serverDefaultLiveData = MutableLiveData<Server>()
+    var serverDefaultLiveData = MutableLiveData<Server?>()
 
     init {
-        getServer()
+        getServers()
     }
-    fun getServer() {
+
+    fun getServers() {
         serverRepository.getServers()
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(object : TianaSingleObserver<List<Server>>(compositeDisposable) {
                 override fun onSuccess(t: List<Server>) {
                     serversLiveData.value = t
+                    getDefault()
                 }
             })
 
-        serverRepository.getDefaultServer()
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(object : TianaSingleObserver<Server>(compositeDisposable) {
-                override fun onSuccess(t: Server) {
-                    serverDefaultLiveData.value = t
-                }
-            })
+    }
+
+    fun getDefault() {
+        serverDefaultLiveData.value = null
+        if (serversLiveData.value != null && serversLiveData.value!!.isNotEmpty()) {
+            serversLiveData.value!!.forEach {
+                if (it.isDefault)
+                    serverDefaultLiveData.value = it
+            }
+            if (serverDefaultLiveData.value == null) {
+                var saver = serversLiveData.value!![0]
+                updateServer(saver)
+            }
+        }
     }
 
     fun addServer(server: Server) {
 
-        server.isDefault = (serverDefaultLiveData.value == null)
+        if (serverDefaultLiveData.value == null)
+            server.isDefault = true
         serverRepository.addServer(
             server
         )
+            .subscribeOn(Schedulers.io())
+            .doFinally { getServers() }
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(object : TianaCompletableObserver(compositeDisposable) {
                 override fun onComplete() {
@@ -55,23 +66,24 @@ class ServerViewModel(val serverRepository: ServerRepository) : ViewModel() {
                 }
             }
             )
-        getServer()
     }
 
     fun deleteServer(server: Server) {
 
-        server.isDefault = (serverDefaultLiveData.value == null)
         serverRepository.deleteServer(
             server
         )
+            .subscribeOn(Schedulers.io())
+            .doFinally {
+                getServers()
+
+            }
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(object : TianaCompletableObserver(compositeDisposable) {
                 override fun onComplete() {
-                    Timber.i("delete server")
                 }
             }
             )
-        getServer()
     }
 
     fun updateServer(server: Server) {
@@ -80,28 +92,38 @@ class ServerViewModel(val serverRepository: ServerRepository) : ViewModel() {
         serverRepository.updateServer(
             server
         )
+            .subscribeOn(Schedulers.io())
+            .doFinally {
+                if (serverDefaultLiveData.value==null)
+                    serverDefaultLiveData.postValue(
+                        server
+                    )
+                else{
+                  serverDefaultLiveData.value!!.isDefault=false
+                    serverRepository.updateServer(serverDefaultLiveData.value!!)
+                        .doFinally {
+                            getServers()
+                        }
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(object : TianaCompletableObserver(compositeDisposable) {
+                            override fun onComplete() {
+                            }
+                        }
+                        )
+                }
+
+
+
+            }
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(object : TianaCompletableObserver(compositeDisposable) {
                 override fun onComplete() {
-                    Timber.i("change server")
                 }
             }
             )
-        serverDefaultLiveData.value?.let {
-            it.isDefault = false
-            serverRepository.updateServer(
-                it
-            )
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(object : TianaCompletableObserver(compositeDisposable) {
-                    override fun onComplete() {
-                        Timber.i("change server")
-                    }
-                }
-                )
-        }
-        serverDefaultLiveData.value=server
-        getServer()
+
+
     }
 
 
